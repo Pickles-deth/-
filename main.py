@@ -1,4 +1,4 @@
-
+```python
 from cellpose import models
 import cv2
 import numpy as np
@@ -30,7 +30,7 @@ def compute_cell_score_from_pixels(pixels):
 
 
 # =========================
-# スコア計算（全細胞）
+# スコア（全細胞）
 # =========================
 def compute_scores(img_rgb, masks):
 
@@ -70,9 +70,9 @@ def visualize_cells(img_rgb, masks, scores, threshold):
         score = score_dict.get(label, 0)
 
         if score >= threshold:
-            color = np.array([255, 0, 0])   # 赤：老化
+            color = np.array([255, 0, 0])   # 老化
         else:
-            color = np.array([0, 255, 0])   # 緑：正常
+            color = np.array([0, 255, 0])   # 正常
 
         vis[cell_mask] = vis[cell_mask] * 0.5 + color * 0.5
 
@@ -80,7 +80,7 @@ def visualize_cells(img_rgb, masks, scores, threshold):
 
 
 # =========================
-# メイン解析関数（Streamlitから呼ぶ）
+# メイン関数（Streamlit用）
 # =========================
 def analyze(img_path):
 
@@ -129,4 +129,4 @@ def analyze(img_path):
         "ratio": positive / total_cells if total_cells > 0 else 0,
         "output_image": str(out_path)
     }
-
+```
