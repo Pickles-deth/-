@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from skimage import measure, exposure
 from pathlib import Path
+import tempfile
 
 
 # =========================
@@ -80,13 +81,11 @@ def visualize_cells(img_rgb, masks, scores, threshold):
 
 
 # =========================
-# メイン関数（Streamlit用）
+# メイン解析
 # =========================
 def analyze(img_path):
 
-    img_path = Path(img_path)
-
-    img_bgr = cv2.imread(str(img_path))
+    img_bgr = cv2.imread(img_path)
     if img_bgr is None:
         raise FileNotFoundError("画像読み込めません")
 
@@ -96,8 +95,8 @@ def analyze(img_path):
     img_rgb = exposure.equalize_adapthist(img_rgb, clip_limit=0.03)
     img_rgb = (img_rgb * 255).astype(np.uint8)
 
-    # Cellpose
-    model = models.Cellpose(model_type='cyto2', gpu=False)
+    # 👇 軽量モデルに変更（重要）
+    model = models.Cellpose(model_type='cyto', gpu=False)
 
     masks, _, _, _ = model.eval(
         img_rgb,
@@ -120,7 +119,8 @@ def analyze(img_path):
     # 可視化
     vis = visualize_cells(img_rgb, masks, scores, threshold)
 
-    out_path = img_path.with_name("result_overlay.png")
+    # 👇 Streamlit用安全パス
+    out_path = Path(tempfile.gettempdir()) / "result_overlay.png"
     cv2.imwrite(str(out_path), cv2.cvtColor(vis, cv2.COLOR_RGB2BGR))
 
     return {
@@ -129,3 +129,4 @@ def analyze(img_path):
         "ratio": positive / total_cells if total_cells > 0 else 0,
         "output_image": str(out_path)
     }
+
