@@ -4,4 +4,4 @@ scikit-image
 opencv-python-headless==4.8.1.78
 pillow
 cellpose
-torch
+torch==2.0.0
