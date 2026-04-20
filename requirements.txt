@@ -1,6 +1,7 @@
 streamlit
 numpy
 scikit-image
-opencv-python-headless
+opencv-python-headless==4.8.1.78
+pillow
 cellpose
 torch
