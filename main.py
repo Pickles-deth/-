@@ -1,4 +1,4 @@
-```python
+
 from cellpose import models
 import cv2
 import numpy as np
@@ -129,4 +129,4 @@ def analyze(img_path):
         "ratio": positive / total_cells if total_cells > 0 else 0,
         "output_image": str(out_path)
     }
-```
+
