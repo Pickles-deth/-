@@ -1,0 +1,6 @@
+streamlit
+numpy
+scikit-image
+opencv-python-headless
+cellpose
+torch
