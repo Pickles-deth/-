@@ -28,6 +28,7 @@ if uploaded_file is not None:
     st.write(f"Positive cells: {result['positive']}")
     st.write(f"Ratio: {result['ratio']*100:.1f}%")
 
-    # 画像表示（cv2使わない）
+    # 👇 cv2使わない（超重要）
     image = Image.open(result["output_image"])
     st.image(image, caption="解析結果", use_container_width=True)
+
