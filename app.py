@@ -1,15 +1,14 @@
-import streamlit as st
-import numpy as np
-import cv2
-from pathlib import Path
-import tempfile
 
-from analysis import analyze  # ← あなたの関数をimport
+import streamlit as st
+import tempfile
+import cv2
+
+from main import analyze
 
 
 st.title("β-gal Cell Analyzer")
 
-uploaded_file = st.file_uploader("画像をアップロード", type=["png", "jpg", "tif"])
+uploaded_file = st.file_uploader("画像をアップロード", type=["png", "jpg", "jpeg", "tif"])
 
 if uploaded_file is not None:
 
@@ -19,14 +18,16 @@ if uploaded_file is not None:
 
     st.write("解析中...")
 
-    analyze(tfile.name)
+    result = analyze(tfile.name)
 
-    # 結果画像表示
-    result_path = Path(tfile.name).with_name("result_overlay.png")
+    st.subheader("結果")
 
-    if result_path.exists():
-        img = cv2.imread(str(result_path))
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    st.write(f"Total cells: {result['total']}")
+    st.write(f"Positive cells: {result['positive']}")
+    st.write(f"Ratio: {result['ratio']*100:.1f}%")
 
-        st.image(img, caption="解析結果", use_column_width=True)
+    # 画像表示
+    img = cv2.imread(result["output_image"])
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+    st.image(img, caption="解析結果", use_container_width=True)
